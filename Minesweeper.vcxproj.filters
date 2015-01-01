@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineMouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineAbout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineDebug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineBestTimes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineNewBest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineCustom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MineMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineMouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineAbout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineDebug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineBestTimes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineNewBest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineCustom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MineMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Minesweeper.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Minesweeper.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Clicked8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="FaceClicked.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="FaceLost.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="FaceNormal.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="FaceWon.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="FalseFlag.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Flag.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Held.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Mine.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="MineHit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random9.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random10.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random11.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random12.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random13.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random14.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Random15.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Solid8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Timer9.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TimerDash.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Unclicked.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

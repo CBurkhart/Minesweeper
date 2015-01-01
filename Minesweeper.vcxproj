@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0F01009A-0E76-4348-9379-85765CFBE229}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Minesweeper</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>MinesweeperDeluxe</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>MinesweeperDeluxe</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>comctl32.lib;user32.lib;gdi32.lib;advapi32.lib;Shell32.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>comctl32.lib;user32.lib;gdi32.lib;advapi32.lib;Shell32.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="MineAbout.h" />
+    <ClInclude Include="MineBestTimes.h" />
+    <ClInclude Include="MineCustom.h" />
+    <ClInclude Include="MineMouse.h" />
+    <ClInclude Include="Mine.h" />
+    <ClInclude Include="MineDebug.h" />
+    <ClInclude Include="MineMovement.h" />
+    <ClInclude Include="MineNewBest.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MineAbout.cpp" />
+    <ClCompile Include="MineBestTimes.cpp" />
+    <ClCompile Include="MineCustom.cpp" />
+    <ClCompile Include="MineMouse.cpp" />
+    <ClCompile Include="Mine.cpp" />
+    <ClCompile Include="MineDebug.cpp" />
+    <ClCompile Include="MineMovement.cpp" />
+    <ClCompile Include="MineNewBest.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Minesweeper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Clicked0.bmp" />
+    <Image Include="Clicked1.bmp" />
+    <Image Include="Clicked2.bmp" />
+    <Image Include="Clicked3.bmp" />
+    <Image Include="Clicked4.bmp" />
+    <Image Include="Clicked5.bmp" />
+    <Image Include="Clicked6.bmp" />
+    <Image Include="Clicked7.bmp" />
+    <Image Include="Clicked8.bmp" />
+    <Image Include="FaceClicked.bmp" />
+    <Image Include="FaceLost.bmp" />
+    <Image Include="FaceNormal.bmp" />
+    <Image Include="FaceWon.bmp" />
+    <Image Include="FalseFlag.bmp" />
+    <Image Include="Flag.bmp" />
+    <Image Include="Held.bmp" />
+    <Image Include="Mine.bmp" />
+    <Image Include="MineHit.bmp" />
+    <Image Include="Minesweeper.ico" />
+    <Image Include="Random0.bmp" />
+    <Image Include="Random1.bmp" />
+    <Image Include="Random10.bmp" />
+    <Image Include="Random11.bmp" />
+    <Image Include="Random12.bmp" />
+    <Image Include="Random13.bmp" />
+    <Image Include="Random14.bmp" />
+    <Image Include="Random15.bmp" />
+    <Image Include="Random2.bmp" />
+    <Image Include="Random3.bmp" />
+    <Image Include="Random4.bmp" />
+    <Image Include="Random5.bmp" />
+    <Image Include="Random6.bmp" />
+    <Image Include="Random7.bmp" />
+    <Image Include="Random8.bmp" />
+    <Image Include="Random9.bmp" />
+    <Image Include="small.ico" />
+    <Image Include="Solid0.bmp" />
+    <Image Include="Solid1.bmp" />
+    <Image Include="Solid2.bmp" />
+    <Image Include="Solid3.bmp" />
+    <Image Include="Solid4.bmp" />
+    <Image Include="Solid5.bmp" />
+    <Image Include="Solid6.bmp" />
+    <Image Include="Solid7.bmp" />
+    <Image Include="Solid8.bmp" />
+    <Image Include="Timer0.bmp" />
+    <Image Include="Timer1.bmp" />
+    <Image Include="Timer2.bmp" />
+    <Image Include="Timer3.bmp" />
+    <Image Include="Timer4.bmp" />
+    <Image Include="Timer5.bmp" />
+    <Image Include="Timer6.bmp" />
+    <Image Include="Timer7.bmp" />
+    <Image Include="Timer8.bmp" />
+    <Image Include="Timer9.bmp" />
+    <Image Include="TimerDash.bmp" />
+    <Image Include="Unclicked.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
