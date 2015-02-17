@@ -297,6 +297,7 @@ MineMovement_ProcessMovement(VOID)
     LONG       currentY = -1;
     UINT       directionsToCheck = 0;
     BOOLEAN    finished = FALSE;
+    HANDLE     hHeap = NULL;
     UINT       ix = 0;
     UINT       jx = 0;
     UINT       kx = 0;
@@ -313,6 +314,14 @@ MineMovement_ProcessMovement(VOID)
 
     do
     {
+        hHeap = GetProcessHeap();
+        if (NULL == hHeap)
+        {
+            MineDebug_PrintError("Getting process heap: %lu\n", GetLastError());
+            status = MINE_ERROR_HEAP;
+            break;
+        }
+
         /** The more aggressive, the more directions of movement will be checked. */
         switch (menuData.movementAggressive)
         {
@@ -342,7 +351,7 @@ MineMovement_ProcessMovement(VOID)
         /** The more aggressive, the more mines will try to move. */
         minesToCheck = ((UINT) gameData.mines) * ((UINT) menuData.movementAggressive) / 10;
 
-        pXOrder = (UINT *) malloc(gameData.width*sizeof(UINT));
+        pXOrder = (UINT *) HeapAlloc(hHeap, 0, gameData.width*sizeof(UINT));
         if (NULL == pXOrder)
         {
             MineDebug_PrintError("Unable to allocate memory\n");
@@ -350,7 +359,7 @@ MineMovement_ProcessMovement(VOID)
             break;
         }
 
-        pYOrder = (UINT *) malloc(gameData.height*sizeof(UINT));
+        pYOrder = (UINT *) HeapAlloc(hHeap, 0, gameData.height*sizeof(UINT));
         if (NULL == pYOrder)
         {
             MineDebug_PrintError("Unable to allocate memory\n");
@@ -358,7 +367,7 @@ MineMovement_ProcessMovement(VOID)
             break;
         }
 
-        pMoveOrder = (UINT *) malloc(8*sizeof(UINT));
+        pMoveOrder = (UINT *) HeapAlloc(hHeap, 0, 8*sizeof(UINT));
         if (NULL == pMoveOrder)
         {
             MineDebug_PrintError("Unable to allocate memory\n");
@@ -595,19 +604,34 @@ MineMovement_ProcessMovement(VOID)
     } while (bFalse);
 
     //Clean up
-    if (NULL != pXOrder)
+    if (NULL != hHeap)
     {
-        free(pXOrder);
-    }
+        if (NULL != pXOrder)
+        {
+            if (0 == HeapFree(hHeap, 0, pXOrder))
+            {
+                MineDebug_PrintWarning("Unable to free pXOrder: %lu\n", GetLastError());
+            }
+            pXOrder = NULL;
+        }
 
-    if (NULL != pYOrder)
-    {
-        free(pYOrder);
-    }
+        if (NULL != pYOrder)
+        {
+            if (0 != HeapFree(hHeap, 0, pYOrder))
+            {
+                MineDebug_PrintWarning("Unable to free pYOrder: %lu\n", GetLastError());
+            }
+            pYOrder = NULL;
+        }
 
-    if (NULL != pMoveOrder)
-    {
-        free(pMoveOrder);
+        if (NULL != pMoveOrder)
+        {
+            if (0 != HeapFree(hHeap, 0, pMoveOrder))
+            {
+                MineDebug_PrintWarning("Unable to free pMoveOrder: %lu\n", GetLastError());
+            }
+            pMoveOrder = NULL;
+        }
     }
 
     return status;

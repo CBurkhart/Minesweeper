@@ -52,7 +52,7 @@ MineDebug_FormatPrintToDebugConsole(_In_z_ LPSTR level, _In_z_ LPSTR file, INT l
     {
         if ((NULL == level) || (NULL == file) || (NULL == format))
         {
-            OutputDebugStringA("MINESWEEPER DELUX PRINT ERROR parameter in NULL\n");
+            OutputDebugStringA("MINESWEEPER DELUXE PRINT ERROR parameter in NULL\n");
             break;
         }
 
@@ -72,11 +72,11 @@ MineDebug_FormatPrintToDebugConsole(_In_z_ LPSTR level, _In_z_ LPSTR file, INT l
             //errno equlas 0 indicates the string was truncated, but was still placed in buffer
             if (0 == errno)
             {
-                OutputDebugStringA("MINESWEEPER DELUX PRINT WARNING format string has been truncated\n");
+                OutputDebugStringA("MINESWEEPER DELUXE PRINT WARNING format string has been truncated\n");
             }
             else
             {
-                OutputDebugStringA("MINESWEEPER DELUX PRINT ERROR printing formatted string to buffer\n");
+                OutputDebugStringA("MINESWEEPER DELUXE PRINT ERROR printing formatted string to buffer\n");
                 break;
             }
         }
@@ -89,11 +89,11 @@ MineDebug_FormatPrintToDebugConsole(_In_z_ LPSTR level, _In_z_ LPSTR file, INT l
         {
             if (0 == errno)
             {
-                OutputDebugStringA("MINESWEEPER DELUX PRINT WARNING print string has been truncated\n");
+                OutputDebugStringA("MINESWEEPER DELUXE PRINT WARNING print string has been truncated\n");
             }
             else
             {
-                OutputDebugStringA("MINESWEEPER DELUX PRINT ERROR printing final string to buffer\n");
+                OutputDebugStringA("MINESWEEPER DELUXE PRINT ERROR printing final string to buffer\n");
                 break;
             }
         }

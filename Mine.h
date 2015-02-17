@@ -172,10 +172,14 @@ enum _MINE_ERROR
     MINE_ERROR_CONTROL,
     /** Error creating a new window. */
     MINE_ERROR_CREATE_WINDOW,
+    /** Error related to cryptographic context. */
+    MINE_ERROR_CRYPT,
     /** Error obtaing a handle to a device context. */
     MINE_ERROR_DC,
     /** Error obtaining information from Windows OS. */
     MINE_ERROR_GET_DATA,
+    /** Error related to the process heap. */
+    MINE_ERROR_HEAP,
     /** Error allocating memory. */
     MINE_ERROR_MEMORY,
     /** Error getting a handle to the menu. */ 

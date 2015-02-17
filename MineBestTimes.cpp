@@ -192,12 +192,10 @@ MINE_ERROR
 MineBestTimes_UpdateLabels(_In_ HWND hDlg)
 {
     BOOLEAN    bFalse = FALSE;
-    WCHAR      buffer[MINE_BESTTIME_BUFFER_CHARS];
+    WCHAR      buffer[MINE_BESTTIME_BUFFER_CHARS] = {0};
     HRESULT    hresult = S_OK;
     MINE_ERROR status = MINE_ERROR_SUCCESS;
     MINEDEBUG_INITIALIZE_ERROR_VALUE;
-
-    ZeroMemory(buffer, (MINE_BESTTIME_BUFFER_CHARS)*sizeof(WCHAR));
 
     do
     {

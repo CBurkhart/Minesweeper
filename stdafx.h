@@ -42,18 +42,15 @@
 #include <windowsx.h>
 #include <shellapi.h>
 #include <CommCtrl.h>
+#include <wincrypt.h>
 
 //Other system header files
 
-/** Macro to enable use of rand_s function. */
-#define _CRT_RAND_S
-
-#include <stdlib.h>
-#include <stdio.h>
+#ifdef _DEBUG
+#include <errno.h>
+#endif /* _DEBUG */
+#include <limits.h>
 #include <stdarg.h>
-#include <malloc.h>
-#include <memory.h>
-#include <tchar.h>
 #include <strsafe.h>
 
 #pragma warning(pop)

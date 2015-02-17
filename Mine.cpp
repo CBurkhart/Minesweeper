@@ -37,15 +37,16 @@
 
 // Global Variables:
 BOOLEAN              clockTimerCreated = FALSE;
-MINE_GAME_SETTINGS   gameData;
+MINE_GAME_SETTINGS   gameData = {0};
+HCRYPTPROV           hCrypto = NULL;
 HINSTANCE            hInst = NULL;
 HWND                 hwnd = NULL;
-MINE_IMAGE_STORAGE   imageData;
-MINE_GLOBAL_SETTINGS menuData;
+MINE_IMAGE_STORAGE   imageData = {0};
+MINE_GLOBAL_SETTINGS menuData = {0};
 BOOLEAN              movementTimerCreated = FALSE;
-WCHAR                szTitle[MINE_LOADSTRING_MAX_CHARS];
-WCHAR                szWindowClass[MINE_LOADSTRING_MAX_CHARS];
-MINE_WINDOW_SETTINGS windowData;
+WCHAR                szTitle[MINE_LOADSTRING_MAX_CHARS] = {0};
+WCHAR                szWindowClass[MINE_LOADSTRING_MAX_CHARS] = {0};
+MINE_WINDOW_SETTINGS windowData = {0};
 
 /**
     wWinMain
@@ -68,7 +69,7 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     INITCOMMONCONTROLSEX icc;
     BOOL                 messageReturn = 1;
     MSG                  msg;
-    MINE_ERROR          status = MINE_ERROR_SUCCESS;
+    MINE_ERROR           status = MINE_ERROR_SUCCESS;
     MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(hPrevInstance);
@@ -76,14 +77,6 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     do
     {
-        ZeroMemory(szTitle, MINE_LOADSTRING_MAX_CHARS*sizeof(WCHAR));
-        ZeroMemory(szWindowClass, MINE_LOADSTRING_MAX_CHARS*sizeof(WCHAR));
-
-        ZeroMemory(&menuData, sizeof(MINE_GLOBAL_SETTINGS));
-        ZeroMemory(&gameData, sizeof(MINE_GAME_SETTINGS));
-        ZeroMemory(&windowData, sizeof(MINE_WINDOW_SETTINGS));
-        ZeroMemory(&imageData, sizeof(MINE_IMAGE_STORAGE));
-
         hInst = hInstance;
 
         icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -364,32 +357,61 @@ Mine_AssignNumbers(LONG xGridMin, LONG xGridMax, LONG yGridMin, LONG yGridMax)
 VOID
 Mine_Cleanup(VOID)
 {
-    INT  ix = 0;
+    HANDLE hHeap = NULL;
+    INT    ix = 0;
 
-    /** Free allocated memory. */
-    if(NULL != menuData.beginnerName)
+    hHeap = GetProcessHeap();
+    if (NULL == hHeap)
     {
-        free(menuData.beginnerName);
+        MineDebug_PrintWarning("Getting process heap: %lu\n", GetLastError());
     }
-
-    if(NULL != menuData.intermediateName)
+    else
     {
-        free(menuData.intermediateName);
-    }
+        /** Free allocated memory. */
+        if(NULL != menuData.beginnerName)
+        {
+            if (0 == HeapFree(hHeap, 0, menuData.beginnerName))
+            {
+                MineDebug_PrintWarning("Unable to free beginner name: %lu\n", GetLastError());
+            }
+            menuData.beginnerName = NULL;
+        }
 
-    if(NULL != menuData.expertName)
-    {
-        free(menuData.expertName);
-    }
+        if(NULL != menuData.intermediateName)
+        {
+            if (0 == HeapFree(hHeap, 0, menuData.intermediateName))
+            {
+                MineDebug_PrintWarning("Unable to free intermediate name: %lu\n", GetLastError());
+            }
+            menuData.intermediateName = NULL;
+        }
 
-    if (NULL != gameData.gameBoard)
-    {
-        free(gameData.gameBoard);
-    }
+        if(NULL != menuData.expertName)
+        {
+            if (0 == HeapFree(hHeap, 0, menuData.expertName))
+            {
+                MineDebug_PrintWarning("Unable to free expert name: %lu\n", GetLastError());
+            }
+            menuData.expertName = NULL;
+        }
 
-    if (NULL != gameData.tileStatus)
-    {
-        free(gameData.tileStatus);
+        if (NULL != gameData.gameBoard)
+        {
+            if (0 == HeapFree(hHeap, 0, gameData.gameBoard))
+            {
+                MineDebug_PrintWarning("Unable to free game board: %lu\n", GetLastError());
+            }
+            gameData.gameBoard = NULL;
+        }
+
+        if (NULL != gameData.tileStatus)
+        {
+            if (0 == HeapFree(hHeap, 0, gameData.tileStatus))
+            {
+                MineDebug_PrintWarning("Unable to free tile status: %lu\n", GetLastError());
+            }
+            gameData.tileStatus = NULL;
+        }
     }
 
     /** Delete stored image objects. */
@@ -401,6 +423,7 @@ Mine_Cleanup(VOID)
             {
                 MineDebug_PrintWarning("Unable to delete timer %i object\n", ix);
             }
+            imageData.timer[ix] = NULL;
         }
     }
 
@@ -410,6 +433,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete timer dash object\n");
         }
+        imageData.timerDash = NULL;
     }
 
     if (NULL != imageData.faceNormal)
@@ -418,6 +442,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete face normal object\n");
         }
+        imageData.faceNormal = NULL;
     }
 
     if (NULL != imageData.faceClicked)
@@ -426,6 +451,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete face clicked object\n");
         }
+        imageData.faceClicked = NULL;
     }
 
     if (NULL != imageData.faceWon)
@@ -434,6 +460,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete face won object\n");
         }
+        imageData.faceWon = NULL;
     }
 
     if (NULL != imageData.faceLost)
@@ -442,6 +469,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete face lost object\n");
         }
+        imageData.faceLost = NULL;
     }
 
     for (ix = 0; ix < 9; ix++)
@@ -452,6 +480,7 @@ Mine_Cleanup(VOID)
             {
                 MineDebug_PrintWarning("Unable to delete number %i object\n", ix);
             }
+            imageData.numbers[ix] = NULL;
         }
     }
 
@@ -461,6 +490,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete unclicked object\n");
         }
+        imageData.unclicked = NULL;
     }
 
     if (NULL != imageData.held)
@@ -469,6 +499,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete held object\n");
         }
+        imageData.held = NULL;
     }
 
     if (NULL != imageData.flag)
@@ -477,6 +508,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete flag object\n");
         }
+        imageData.flag = NULL;
     }
 
     if (NULL != imageData.falseFlag)
@@ -485,6 +517,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete false flag object\n");
         }
+        imageData.falseFlag = NULL;
     }
 
     if (NULL != imageData.mine)
@@ -493,6 +526,7 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete mine object\n");
         }
+        imageData.mine = NULL;
     }
 
     if (NULL != imageData.mineHit)
@@ -501,6 +535,16 @@ Mine_Cleanup(VOID)
         {
             MineDebug_PrintWarning("Unable to delete mine hit object\n");
         }
+        imageData.mineHit = NULL;
+    }
+
+    if (NULL != hCrypto)
+    {
+        if (0 == CryptReleaseContext(hCrypto, 0))
+        {
+            MineDebug_PrintWarning("Unable to release crypt context: %lu\n", GetLastError());
+        }
+        hCrypto = NULL;
     }
 
     return;
@@ -608,10 +652,8 @@ Mine_InitInstance(int nCmdShow)
 {
    BOOLEAN    bFalse = FALSE;
    MINE_ERROR status = MINE_ERROR_SUCCESS;
-   RECT       windowSize;
+   RECT       windowSize = {0};
    MINEDEBUG_INITIALIZE_ERROR_VALUE;
-
-   ZeroMemory(&windowSize, sizeof(RECT));
 
    do
    {
@@ -760,7 +802,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
     HDC         memoryDC = NULL;
     DWORD       minesLeft = 0;
     HGDIOBJ     prevObject = NULL;
-    PAINTSTRUCT ps;
+    PAINTSTRUCT ps = {0};
     MINE_ERROR  status = MINE_ERROR_SUCCESS;
     HPEN        whitePen = NULL;
     MINEDEBUG_INITIALIZE_ERROR_VALUE;
@@ -773,8 +815,6 @@ Mine_PaintScreen(_In_ HWND hwnd)
             status = MINE_ERROR_PARAMETER;
             break;
         }
-
-        ZeroMemory(&ps, sizeof(PAINTSTRUCT));
 
         hDC = BeginPaint(hwnd, &ps);
         if (NULL == hDC)
@@ -1557,7 +1597,7 @@ Mine_Random(UINT limit, _Out_ PUINT output)
     int            onboardTries = 0;
     static BOOLEAN processorChecked = FALSE;
     UINT           rand = 0;
-    errno_t        returnCode = 0;
+    BOOL           returnCode = 1;
     MINE_ERROR     status = MINE_ERROR_SUCCESS;
     UINT           upperbound = UINT_MAX;
 
@@ -1567,74 +1607,86 @@ Mine_Random(UINT limit, _Out_ PUINT output)
             the first time the function is called. */
         if (!processorChecked)
         {
-            processorChecked = TRUE;
-
-            //First check if CPUID call is supported
-            __asm
+            do
             {
-                //Store registers that will be changed
-                push eax
-                push ecx
-                //Put EFLAGS register into EAX and also ECX
-                pushfd
-                pop eax
-                mov ecx, eax
-                //Flip bit 21, CPUID bit
-                xor eax, 0x200000
-                push eax
-                popfd
-                pushfd
-                pop eax
-                //Check if change to bit 21 was stored in EFLAGS
-                xor eax, ecx
-                mov eflagsValue, eax
-                //Restore value for EFLAGS
-                push ecx
-                popfd
-                //Restore value for EAX and ECX
-                pop ecx
-                pop eax
-            }
+                processorChecked = TRUE;
 
-            if (0 == eflagsValue)
+                //First check if CPUID call is supported
+                __asm
+                {
+                    //Store registers that will be changed
+                    push eax
+                    push ecx
+                    //Put EFLAGS register into EAX and also ECX
+                    pushfd
+                    pop eax
+                    mov ecx, eax
+                    //Flip bit 21, CPUID bit
+                    xor eax, 0x200000
+                    push eax
+                    popfd
+                    pushfd
+                    pop eax
+                    //Check if change to bit 21 was stored in EFLAGS
+                    xor eax, ecx
+                    mov eflagsValue, eax
+                    //Restore value for EFLAGS
+                    push ecx
+                    popfd
+                    //Restore value for EAX and ECX
+                    pop ecx
+                    pop eax
+                }
+
+                if (0 == eflagsValue)
+                {
+                    //CPUID call not supported
+                    break;
+                }
+
+                //CPUID call with EAX == 0x01 is always supported,
+                //don't need to check Maximum Input Value
+
+                //Check if RDRAND call is supported
+                __asm
+                {
+                    //Store registers that will be changed
+                    push eax
+                    push ebx
+                    push ecx
+                    push edx
+                    //Call CPUID with Input Value 0x01
+                    mov eax, 0x01
+                    cpuid
+                    //Extract feature information
+                    mov cpuidValue, ecx
+                    //Restore registers
+                    pop edx
+                    pop ecx
+                    pop ebx
+                    pop eax
+                }
+
+                //Bit 30 is set to 1 if RDRAND function is supported
+                if (0 != (cpuidValue & (1 << 30)))
+                {
+                    onboardRng = TRUE;
+                }
+            } while (bFalse);
+
+            //If RDRAND is not supported, set up the windows crypt provider
+            if (!onboardRng)
             {
-                //CPUID call not supported
-                break;
+                if (0 == CryptAcquireContextW(&hCrypto, NULL, MS_DEF_PROV_W, PROV_RSA_FULL, 
+                                              CRYPT_VERIFYCONTEXT | CRYPT_SILENT) || (NULL == hCrypto))
+                {
+                    MineDebug_PrintError("Unable to get a cryptographic context: %lu\n", GetLastError());
+                    status = MINE_ERROR_CRYPT;
+                    break;
+                }
             }
+        } 
 
-            //CPUID call with EAX == 0x01 is always supported,
-            //don't need to check Maximum Input Value
-
-            //Check if RDRAND call is supported
-            __asm
-            {
-                //Store registers that will be changed
-                push eax
-                push ebx
-                push ecx
-                push edx
-                //Call CPUID with Input Value 0x01
-                mov eax, 0x01
-                cpuid
-                //Extract feature information
-                mov cpuidValue, ecx
-                //Restore registers
-                pop edx
-                pop ecx
-                pop ebx
-                pop eax
-            }
-
-            //Bit 30 is set to 1 if RDRAND function is supported
-            if (0 != (cpuidValue & (1 << 30)))
-            {
-                onboardRng = TRUE;
-            }
-        }
-    } while (bFalse);
-
-    do
-    {
         if (NULL == output)
         {
             MineDebug_PrintError("Parameter output is NULL\n");
@@ -1715,18 +1767,23 @@ Mine_Random(UINT limit, _Out_ PUINT output)
         }
         else //RDRAND not supported
         {
-            //Input pointer cannot be null and any other error will 
-            //set rand to 0 and therefore skip/break out of the loop
-            returnCode = rand_s(&rand);
+            if (0 == CryptGenRandom(hCrypto, sizeof(UINT), (BYTE*) &rand))
+            {
+                MineDebug_PrintError("Getting random number: %lu\n", GetLastError());
+                status = MINE_ERROR_RANDNUMBER;
+            }
 
             while (rand > upperbound)
             {
-                returnCode = rand_s(&rand);
+                returnCode = CryptGenRandom(hCrypto, sizeof(UINT), (BYTE*) &rand);
+                if (0 == returnCode)
+                {
+                    break;
+                }
             }
-
-            if (0 != returnCode)
+            if (0 == returnCode)
             {
-                MineDebug_PrintError("Getting random number: %i\n", returnCode);
+                MineDebug_PrintError("Getting random number: %lu\n", GetLastError());
                 status = MINE_ERROR_RANDNUMBER;
                 break;
             }
@@ -1811,10 +1868,8 @@ Mine_RegisterClass(VOID)
     ATOM        atom = 0;
     BOOLEAN     bFalse = FALSE;
     MINE_ERROR  status = MINE_ERROR_SUCCESS;
-    WNDCLASSEXW wcex;
+    WNDCLASSEXW wcex = {0};
     MINEDEBUG_INITIALIZE_ERROR_VALUE;
-
-    ZeroMemory(&wcex, sizeof(WNDCLASSEXW));
 
     do
     {
@@ -2046,20 +2101,35 @@ MINE_ERROR
 Mine_SetupGame(VOID)
 {
     BOOLEAN    bFalse = FALSE;
+    HANDLE     hHeap = NULL;
     MINE_ERROR status = MINE_ERROR_SUCCESS;
 
     do
     {
+        hHeap = GetProcessHeap();
+        if (NULL == hHeap)
+        {
+            MineDebug_PrintError("Getting process heap: %lu\n", GetLastError());
+            status = MINE_ERROR_HEAP;
+            break;
+        }
+
         //Free memory for previous game board
         if (NULL != gameData.gameBoard)
         {
-            free(gameData.gameBoard);
+            if (0 == HeapFree(hHeap, 0, gameData.gameBoard))
+            {
+                MineDebug_PrintWarning("Unable to free game board: %lu\n", GetLastError());
+            }
             gameData.gameBoard = NULL;
         }
 
         if (NULL != gameData.tileStatus)
         {
-            free(gameData.tileStatus);
+            if (0 == HeapFree(hHeap, 0, gameData.tileStatus))
+            {
+                MineDebug_PrintWarning("Unable to free tile status: %lu\n", GetLastError());
+            }
             gameData.tileStatus = NULL;
         }
 
@@ -2098,7 +2168,8 @@ Mine_SetupGame(VOID)
         gameData.numFlagged = 0;
         gameData.numUncovered = 0;
 
-        gameData.gameBoard = (CHAR *) malloc(gameData.height * gameData.width * sizeof(CHAR));
+        gameData.gameBoard = (CHAR *) HeapAlloc(hHeap, HEAP_ZERO_MEMORY,
+                                                gameData.height * gameData.width * sizeof(CHAR));
         if (NULL == gameData.gameBoard)
         {
             MineDebug_PrintError("Allocating memory for gameBoard\n");
@@ -2106,17 +2177,14 @@ Mine_SetupGame(VOID)
             break;
         }
 
-        ZeroMemory(gameData.gameBoard,gameData.height*gameData.width*sizeof(CHAR));
-
-        gameData.tileStatus = (CHAR *) malloc(gameData.height * gameData.width * sizeof(CHAR));
+        gameData.tileStatus = (CHAR *) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, 
+                                                 gameData.height * gameData.width * sizeof(CHAR));
         if (NULL == gameData.tileStatus)
         {
             MineDebug_PrintError("Allocating memory for tileStatus\n");
             status = MINE_ERROR_MEMORY;
             break;
         }
-
-        ZeroMemory(gameData.tileStatus,gameData.height*gameData.width*sizeof(CHAR));
 
         gameData.time = 0;
 
@@ -2150,18 +2218,23 @@ Mine_SetupGame(VOID)
     } while (bFalse);
 
     //Clean up (upon error only)
-
-    if (MINE_ERROR_SUCCESS != status)
+    if ((MINE_ERROR_SUCCESS != status) && (NULL != hHeap))
     {
         if (NULL != gameData.gameBoard)
         {
-            free(gameData.gameBoard);
+            if (0 == HeapFree(hHeap, 0, gameData.gameBoard))
+            {
+                MineDebug_PrintWarning("Unable to free game board: %lu\n", GetLastError());
+            }
             gameData.gameBoard = NULL;
         }
 
         if (NULL != gameData.tileStatus)
         {
-            free(gameData.tileStatus);
+            if (0 == HeapFree(hHeap, 0, gameData.tileStatus))
+            {
+                MineDebug_PrintWarning("Unable to free tile status: %lu\n", GetLastError());
+            }
             gameData.tileStatus = NULL;
         }
     }
@@ -2180,6 +2253,7 @@ MINE_ERROR
 Mine_SetupGlobal(VOID)
 {
     BOOLEAN    bFalse = FALSE;
+    HANDLE     hHeap = NULL;
     LSTATUS    lstatus = ERROR_SUCCESS;
     HKEY       registryKey = NULL;
     DWORD      regType = 0;
@@ -2190,8 +2264,17 @@ Mine_SetupGlobal(VOID)
 
     do
     {
+        hHeap = GetProcessHeap();
+        if (NULL == hHeap)
+        {
+            MineDebug_PrintError("Getting process heap: %lu", GetLastError());
+            status = MINE_ERROR_HEAP;
+            break;
+        }
+
         //Allocate memory for best time names
-        menuData.beginnerName = (LPWSTR) malloc((MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
+        menuData.beginnerName = (LPWSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY,
+                                                   (MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
         if (NULL == menuData.beginnerName)
         {
             MineDebug_PrintError("Allocating memory for beginnerName\n");
@@ -2199,7 +2282,8 @@ Mine_SetupGlobal(VOID)
             break;
         }
 
-        menuData.intermediateName = (LPWSTR) malloc((MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
+        menuData.intermediateName = (LPWSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY,
+                                                       (MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
         if (NULL == menuData.intermediateName)
         {
             MineDebug_PrintError("Allocating memory for intermediateName\n");
@@ -2207,17 +2291,14 @@ Mine_SetupGlobal(VOID)
             break;
         }
 
-        menuData.expertName = (LPWSTR) malloc((MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
+        menuData.expertName = (LPWSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY,
+                                                 (MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
         if (NULL == menuData.expertName)
         {
             MineDebug_PrintError("Allocating memory for expertName\n");
             status = MINE_ERROR_MEMORY;
             break;
         }
-
-        ZeroMemory(menuData.beginnerName, (MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
-        ZeroMemory(menuData.intermediateName, (MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
-        ZeroMemory(menuData.expertName, (MINE_NAME_BUFFER_CHARS+1)*sizeof(WCHAR));
 
         //Set the default values in case of error reading registry
         menuData.gameLevel = MINE_LEVEL_BEGINNER;
