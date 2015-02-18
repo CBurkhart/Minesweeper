@@ -28,20 +28,6 @@
 #define MINEDEBUG_BUFFER_CHARS 500
 
 #ifdef _DEBUG
-/** Macro that initalizes a variable to hold error information. */
-#define MINEDEBUG_INITIALIZE_ERROR_VALUE DWORD errorValue = 0;
-#else /* _DEBUG */
-#define MINEDEBUG_INITIALIZE_ERROR_VALUE
-#endif /* _DEBUG */
-
-#ifdef _DEBUG
-/** Macro to get error information from Windows OS. */
-#define MINEDEBUG_GET_ERROR_VALUE errorValue = GetLastError();
-#else /* _DEBUG */
-#define MINEDEBUG_GET_ERROR_VALUE
-#endif /* _DEBUG */
-
-#ifdef _DEBUG
 /** Macro to print error statement only if compiled in debug mode. */
 #define MineDebug_PrintError(...) \
 MineDebug_FormatPrintToDebugConsole("ERROR", __FILE__, __LINE__, __VA_ARGS__);

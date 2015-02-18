@@ -43,7 +43,6 @@ INT_PTR CALLBACK
 MineBestTimes_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR    returnValue = (INT_PTR) FALSE;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(lParam);
 
@@ -67,8 +66,7 @@ MineBestTimes_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             returnValue = (INT_PTR) TRUE;
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         /** Reset socres to default time and name if "Reset Scores" button is pressed. */
@@ -195,7 +193,6 @@ MineBestTimes_UpdateLabels(_In_ HWND hDlg)
     WCHAR      buffer[MINE_BESTTIME_BUFFER_CHARS] = {0};
     HRESULT    hresult = S_OK;
     MINE_ERROR status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -211,14 +208,12 @@ MineBestTimes_UpdateLabels(_In_ HWND hDlg)
 
         if (0 == SetDlgItemTextW(hDlg, IDC_BESTTIME_BEGTIME, buffer))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting beginner time string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting beginner time string: %lu\n", GetLastError());
         }
 
         if (0 == SetDlgItemTextW(hDlg, IDC_BESTTIME_BEGNAME, menuData.beginnerName))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting beginner name string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting beginner name string: %lu\n", GetLastError());
         }
 
         /** Display the intermediate best time and name on the dialog window. */
@@ -233,14 +228,12 @@ MineBestTimes_UpdateLabels(_In_ HWND hDlg)
 
         if (0 == SetDlgItemTextW(hDlg, IDC_BESTTIME_INTTIME, buffer))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting intermediate time string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting intermediate time string: %lu\n", GetLastError());
         }     
 
         if (0 == SetDlgItemTextW(hDlg, IDC_BESTTIME_INTNAME, menuData.intermediateName))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting intermediate name string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting intermediate name string: %lu\n", GetLastError());
         }
 
         /** Display the expert best time and name on the dialog window. */
@@ -255,14 +248,12 @@ MineBestTimes_UpdateLabels(_In_ HWND hDlg)
 
         if (0 == SetDlgItemTextW(hDlg, IDC_BESTTIME_EXPTIME, buffer))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting expert time string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting expert time string: %lu\n", GetLastError());
         }
 
         if (0 == SetDlgItemTextW(hDlg, IDC_BESTTIME_EXPNAME, menuData.expertName))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting expert name string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting expert name string: %lu\n", GetLastError());
         }
     } while (bFalse);
 

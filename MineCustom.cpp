@@ -45,7 +45,6 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     BOOL       bReturn = TRUE;
     INT_PTR    returnValue = (INT_PTR) FALSE;
     UINT       value = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(lParam);
 
@@ -59,20 +58,17 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         /** Set dialog edit boxes to previous values. */ 
         if (0 == SetDlgItemInt(hDlg, IDC_CUSTOM_HEIGHT, (UINT) menuData.customHeight, FALSE))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting custom height int: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting custom height int: %lu\n", GetLastError());
         }
 
         if (0 == SetDlgItemInt(hDlg, IDC_CUSTOM_WIDTH, (UINT) menuData.customWidth, FALSE))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting custom width int: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting custom width int: %lu\n", GetLastError());
         }
 
         if (0 == SetDlgItemInt(hDlg, IDC_CUSTOM_MINES, (UINT) menuData.customMines, FALSE))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting custom mines int: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting custom mines int: %lu\n", GetLastError());
         }
         break;
 
@@ -86,8 +82,7 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             value = GetDlgItemInt(hDlg, IDC_CUSTOM_HEIGHT, &bReturn, FALSE);
             if (FALSE == bReturn)
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Getting custom height int: %lu\n", errorValue);
+                MineDebug_PrintWarning("Getting custom height int: %lu\n", GetLastError());
                 value = MINE_BEGINNER_HEIGHT;
             }
             else if (MINE_BEGINNER_HEIGHT > value)
@@ -111,8 +106,7 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             value = GetDlgItemInt(hDlg, IDC_CUSTOM_WIDTH, &bReturn, FALSE);
             if (FALSE == bReturn)
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Getting custom width int: %lu\n", errorValue);
+                MineDebug_PrintWarning("Getting custom width int: %lu\n", GetLastError());
                 value = MINE_BEGINNER_WIDTH;
             }
             else if (MINE_BEGINNER_WIDTH > value)
@@ -136,8 +130,7 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             value = GetDlgItemInt(hDlg, IDC_CUSTOM_MINES, &bReturn, FALSE);
             if (FALSE == bReturn)
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Getting custom mines int: %lu\n", errorValue);
+                MineDebug_PrintWarning("Getting custom mines int: %lu\n", GetLastError());
                 value = MINE_BEGINNER_MINES;
             }
             else if (MINE_BEGINNER_MINES > value)
@@ -160,8 +153,7 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }            
         }
         /** If cancel was pressed, exit without changing any settings. */
@@ -170,8 +162,7 @@ MineCustom_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             returnValue = (INT_PTR) TRUE;
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         break;

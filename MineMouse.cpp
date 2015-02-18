@@ -124,7 +124,6 @@ MineMouse_MoveDoubleClick(short xMouse, short yMouse)
     LONG       xGridUpdate = 0;
     LONG       yGrid = -1;
     LONG       yGridUpdate = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -234,8 +233,7 @@ MineMouse_MoveDoubleClick(short xMouse, short yMouse)
                                         windowData.boardRegion.top+yGridUpdate*MINE_TILE_PIXELS,
                                         MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                         {
-                            MINEDEBUG_GET_ERROR_VALUE;
-                            MineDebug_PrintError("Copying unclicked to screen: %lu\n", errorValue);
+                            MineDebug_PrintError("Copying unclicked to screen: %lu\n", GetLastError());
                             status = MINE_ERROR_PAINT;
                             break;
                         }
@@ -330,8 +328,7 @@ MineMouse_MoveDoubleClick(short xMouse, short yMouse)
                                         windowData.boardRegion.top+yGridUpdate*MINE_TILE_PIXELS, 
                                         MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                         {
-                            MINEDEBUG_GET_ERROR_VALUE;
-                            MineDebug_PrintError("Copying held to screen: %lu\n", errorValue);
+                            MineDebug_PrintError("Copying held to screen: %lu\n", GetLastError());
                             status = MINE_ERROR_PAINT;
                             break;
                         }
@@ -359,6 +356,7 @@ MineMouse_MoveDoubleClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -367,6 +365,7 @@ MineMouse_MoveDoubleClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release device context\n");
         }
+        hDC = NULL;
     }
 
     return status;
@@ -392,7 +391,6 @@ MineMouse_MoveLeftClick(short xMouse, short yMouse)
     MINE_ERROR status = MINE_ERROR_SUCCESS;
     LONG       xGrid = -1;
     LONG       yGrid = -1;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -443,8 +441,7 @@ MineMouse_MoveLeftClick(short xMouse, short yMouse)
                                 windowData.boardRegion.top+gameData.prevGridY*MINE_TILE_PIXELS, 
                                 MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Copying unclicked to screen: %i\n", errorValue);
+                    MineDebug_PrintError("Copying unclicked to screen: %i\n", GetLastError());
                     status = MINE_ERROR_PAINT;
                     break;
                 }
@@ -473,8 +470,7 @@ MineMouse_MoveLeftClick(short xMouse, short yMouse)
                                 windowData.boardRegion.top+yGrid*MINE_TILE_PIXELS, 
                                 MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Copying held to screen: %i\n", errorValue);
+                    MineDebug_PrintError("Copying held to screen: %i\n", GetLastError());
                     status = MINE_ERROR_PAINT;
                     break;
                 }
@@ -494,6 +490,7 @@ MineMouse_MoveLeftClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -502,6 +499,7 @@ MineMouse_MoveLeftClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release device context\n");
         }
+        hDC = NULL;
     }
 
     return status;
@@ -533,7 +531,6 @@ MineMouse_ProcessDoubleClick(short xMouse, short yMouse)
     LONG       xGridUpdate = 0;
     LONG       yGrid = 0;
     LONG       yGridUpdate = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -629,8 +626,7 @@ MineMouse_ProcessDoubleClick(short xMouse, short yMouse)
                                         windowData.boardRegion.top+yGridUpdate*MINE_TILE_PIXELS, 
                                         MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                         {
-                            MINEDEBUG_GET_ERROR_VALUE;
-                            MineDebug_PrintError("Copying unclicked to screen: %lu\n", errorValue);
+                            MineDebug_PrintError("Copying unclicked to screen: %lu\n", GetLastError());
                             status = MINE_ERROR_PAINT;
                             break;
                         }
@@ -812,6 +808,7 @@ MineMouse_ProcessDoubleClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -820,6 +817,7 @@ MineMouse_ProcessDoubleClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release DC\n");
         }
+        hDC = NULL;
     }
     
     return status;
@@ -844,7 +842,6 @@ MineMouse_ProcessLeftClick(short xMouse, short yMouse)
     MINE_ERROR status = MINE_ERROR_SUCCESS;
     LONG       xGrid = 0;
     LONG       yGrid = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -881,8 +878,7 @@ MineMouse_ProcessLeftClick(short xMouse, short yMouse)
                                 windowData.boardRegion.top+gameData.prevGridY*MINE_TILE_PIXELS, 
                                 MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Copying unclicked to screen: %lu\n", errorValue);
+                    MineDebug_PrintError("Copying unclicked to screen: %lu\n", GetLastError());
                     status = MINE_ERROR_PAINT;
                     break;
                 }
@@ -924,6 +920,7 @@ MineMouse_ProcessLeftClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -932,6 +929,7 @@ MineMouse_ProcessLeftClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release DC\n");
         }
+        hDC = NULL;
     }
 
     return status;
@@ -956,7 +954,6 @@ MineMouse_ProcessRightDown(short xMouse, short yMouse)
     MINE_ERROR status = MINE_ERROR_SUCCESS;
     LONG       xGrid = 0;
     LONG       yGrid = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -998,8 +995,7 @@ MineMouse_ProcessRightDown(short xMouse, short yMouse)
                             windowData.boardRegion.top + yGrid * MINE_TILE_PIXELS, MINE_TILE_PIXELS,
                             MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying flag to screen: %lu\n", errorValue);
+                MineDebug_PrintError("Copying flag to screen: %lu\n", GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1026,8 +1022,7 @@ MineMouse_ProcessRightDown(short xMouse, short yMouse)
                             windowData.boardRegion.top + yGrid * MINE_TILE_PIXELS, MINE_TILE_PIXELS,
                             MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying unclicked to screen: %lu\n", errorValue);
+                MineDebug_PrintError("Copying unclicked to screen: %lu\n", GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1046,6 +1041,7 @@ MineMouse_ProcessRightDown(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -1054,6 +1050,7 @@ MineMouse_ProcessRightDown(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release DC\n");
         }
+        hDC = NULL;
     }
 
     return status;
@@ -1082,7 +1079,6 @@ MineMouse_StartDoubleClick(short xMouse, short yMouse)
     LONG       xGridUpdate = 0;
     LONG       yGrid = 0;
     LONG       yGridUpdate = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -1178,8 +1174,7 @@ MineMouse_StartDoubleClick(short xMouse, short yMouse)
                                     windowData.boardRegion.top+yGridUpdate*MINE_TILE_PIXELS, 
                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Copying held to screen: %lu\n", errorValue);
+                        MineDebug_PrintError("Copying held to screen: %lu\n", GetLastError());
                         status = MINE_ERROR_PAINT;
                         break;
                     }
@@ -1210,6 +1205,7 @@ MineMouse_StartDoubleClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -1218,6 +1214,7 @@ MineMouse_StartDoubleClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release DC\n");
         }
+        hDC = NULL;
     }
 
     return status;
@@ -1242,7 +1239,6 @@ MineMouse_StartLeftClick(short xMouse, short yMouse)
     MINE_ERROR status = MINE_ERROR_SUCCESS;
     LONG       xGrid = 0;
     LONG       yGrid = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -1281,8 +1277,7 @@ MineMouse_StartLeftClick(short xMouse, short yMouse)
                             windowData.boardRegion.top+yGrid*MINE_TILE_PIXELS, 
                             MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying held to screen: %lu\n", errorValue);
+                MineDebug_PrintError("Copying held to screen: %lu\n", GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1302,6 +1297,7 @@ MineMouse_StartLeftClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
@@ -1310,6 +1306,7 @@ MineMouse_StartLeftClick(short xMouse, short yMouse)
         {
             MineDebug_PrintWarning("Unable to release DC\n");
         }
+        hDC = NULL;
     }
 
     return status;
@@ -1338,7 +1335,6 @@ MineMouse_UncoverTile(LONG xGrid, LONG yGrid, _In_ HDC hDC, _In_ HDC hMemDC)
     MINE_ERROR status = MINE_ERROR_SUCCESS;
     LONG       xGridUpdate = 0;
     LONG       yGridUpdate = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -1389,8 +1385,7 @@ MineMouse_UncoverTile(LONG xGrid, LONG yGrid, _In_ HDC hDC, _In_ HDC hMemDC)
                             windowData.boardRegion.top+yGrid*MINE_TILE_PIXELS, MINE_TILE_PIXELS,
                             MINE_TILE_PIXELS, hMemDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying numbers %i to screen: %lu\n", (int) boardNumber, errorValue);
+                MineDebug_PrintError("Copying numbers %i to screen: %lu\n", (int) boardNumber, GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }

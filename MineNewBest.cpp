@@ -46,7 +46,6 @@ MineNewBest_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     static LPWSTR pLevelString = NULL;
     INT_PTR       returnValue = (INT_PTR) FALSE;
     MINE_ERROR    status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(lParam);
 
@@ -60,13 +59,11 @@ MineNewBest_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         editHwnd = GetDlgItem(hDlg, IDC_NEWBEST_EDIT);
         if (NULL == editHwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting edit control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting edit control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -82,8 +79,7 @@ MineNewBest_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                                   ((MINE_LEVEL_INTERMEDIATE == menuData.gameLevel) ?
                                     L"for intermediate level." : L"for expert level."))))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting level identification string: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting level identification string: %lu\n", GetLastError());
         }
 
         //Limit edit box to MINE_NAME_BUFFER_CHARS characters
@@ -92,8 +88,7 @@ MineNewBest_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         /** Display name of previous record holder for level in edit box. */
         if (0 == SetWindowTextW(editHwnd, pLevelString))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting edit text to previous value: %lu", errorValue);
+            MineDebug_PrintWarning("Setting edit text to previous value: %lu", GetLastError());
         }
 
         Edit_SetSel(editHwnd, 0, -1);
@@ -108,8 +103,7 @@ MineNewBest_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (0 == GetWindowTextW(editHwnd, pLevelString, MINE_NAME_BUFFER_CHARS + 1))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Problem getting edit text, or no text present: %lu", errorValue);
+                MineDebug_PrintWarning("Problem getting edit text, or no text present: %lu", GetLastError());
                 pLevelString[0] = '\0';
             }
 
@@ -145,8 +139,7 @@ MineNewBest_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         break;

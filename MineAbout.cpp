@@ -48,7 +48,6 @@ MineAbout_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     INT_PTR     returnValue = (INT_PTR) FALSE;
     HINSTANCE   shellExecuteReturn = 0;
     MINE_ERROR  status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     switch (message)
     {
@@ -60,13 +59,11 @@ MineAbout_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         link1Hwnd = GetDlgItem(hDlg, IDC_ABOUT_LINK1);
         if (NULL == link1Hwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting link 1 control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting link 1 control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -74,13 +71,11 @@ MineAbout_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         link2Hwnd = GetDlgItem(hDlg, IDC_ABOUT_LINK2);
         if (NULL == link2Hwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting link 2 control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting link 2 control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }      
@@ -93,8 +88,7 @@ MineAbout_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             returnValue = (INT_PTR) TRUE;
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         else if(IDC_ABOUT_LICENSE == LOWORD(wParam))
@@ -105,8 +99,7 @@ MineAbout_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCEW(IDD_LICENSE), hDlg, MineAbout_LicenseDialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show license dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show license dialog: %lu\n", GetLastError());
                 break;
             }
             else if (MINE_DIALOG_ERROR_OFFSET < dialogReturn)
@@ -174,7 +167,6 @@ MineAbout_LicenseDialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     LPCSTR         licenseText = NULL;
     INT_PTR        returnValue = (INT_PTR) FALSE;
     MINE_ERROR     status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(lParam);
 
@@ -188,13 +180,11 @@ MineAbout_LicenseDialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         editHwnd = GetDlgItem(hDlg, IDC_LICENSE_EDIT);
         if (NULL == editHwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting edit control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting edit control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -203,13 +193,11 @@ MineAbout_LicenseDialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         licenseResource = FindResourceW(hInst, MAKEINTRESOURCEW(IDT_LICENSE), L"TEXT");
         if (NULL == licenseResource)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_RESOURCE;
-            MineDebug_PrintError("Getting license text resource: %lu\n", errorValue);
+            MineDebug_PrintError("Getting license text resource: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -217,13 +205,11 @@ MineAbout_LicenseDialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         licenseHandle = LoadResource(hInst, licenseResource);
         if (NULL == licenseHandle)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_RESOURCE;
-            MineDebug_PrintError("Getting handle to license text resource: %lu\n", errorValue);
+            MineDebug_PrintError("Getting handle to license text resource: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -232,19 +218,17 @@ MineAbout_LicenseDialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         if (NULL == licenseText)
         {
             status = MINE_ERROR_RESOURCE;
-            MineDebug_PrintError("Getting pointer to full license text: %lu\n", errorValue);
+            MineDebug_PrintError("Getting pointer to full license text: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
 
         if (0 == SetWindowTextA(editHwnd, licenseText))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting edit control to hold license text: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting edit control to hold license text: %lu\n", GetLastError());
         }
 
         Edit_SetSel(editHwnd, (WPARAM) -1, -1); 
@@ -268,8 +252,7 @@ MineAbout_LicenseDialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         break;

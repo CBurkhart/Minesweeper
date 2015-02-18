@@ -70,7 +70,6 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     BOOL                 messageReturn = 1;
     MSG                  msg;
     MINE_ERROR           status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -116,16 +115,14 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         //Load strings defined in the resource file
         if (0 == LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MINE_LOADSTRING_MAX_CHARS))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading title string: %lu\n", errorValue);
+            MineDebug_PrintError("Loading title string: %lu\n", GetLastError());
             status = MINE_ERROR_STRING;
             break;
         }
 
         if (0 == LoadStringW(hInstance, IDC_MINESWEEPER, szWindowClass, MINE_LOADSTRING_MAX_CHARS))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading window class string: %lu\n", errorValue);
+            MineDebug_PrintError("Loading window class string: %lu\n", GetLastError());
             status = MINE_ERROR_STRING;
             break;
         }
@@ -149,8 +146,7 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         /** Create the timer that updates the clock. */
         if (0 == SetTimer(hwnd, MINE_TIMER_CLOCK, MINE_CLOCK_UPDATE_TIME, NULL))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Creating clock timer: %lu\n", errorValue);
+            MineDebug_PrintWarning("Creating clock timer: %lu\n", GetLastError());
         }
         else
         {
@@ -162,8 +158,7 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
             /** Create the timer that signals mine movement if needed. */
             if (0 == SetTimer(hwnd, MINE_TIMER_MOVE, (UINT) menuData.movementFreq, NULL))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Creating movement timer: %lu\n", errorValue);
+                MineDebug_PrintWarning("Creating movement timer: %lu\n", GetLastError());
             }
             else
             {
@@ -174,8 +169,7 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         hAccelTable = LoadAcceleratorsW(hInstance, MAKEINTRESOURCEW(IDA_ACCELERATORS));
         if (NULL == hAccelTable)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading accelerator table: %lu\n", errorValue);
+            MineDebug_PrintError("Loading accelerator table: %lu\n", GetLastError());
             status = MINE_ERROR_ACCELERATORS;
             DestroyWindow(hwnd);
             break;
@@ -187,8 +181,7 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         {
             if (-1 == messageReturn)
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Getting message: %lu\n", errorValue);
+                MineDebug_PrintError("Getting message: %lu\n", GetLastError());
                 status = MINE_ERROR_MESSAGE;
                 DestroyWindow(hwnd);
                 break;
@@ -209,13 +202,12 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
         //Quit message is set to status that was kept in window procedure 
         status = (MINE_ERROR) msg.wParam;
-
     } while (bFalse);
 
     //Clean up
     Mine_Cleanup();
 
-    return (int) status;
+    return ((int) status);
 }
 
 /** 
@@ -565,7 +557,7 @@ BOOLEAN
 Mine_DoRectOverlap(_In_ PRECT pRect1, _In_ PRECT pRect2)
 {
     BOOLEAN returnValue = FALSE;
-    RECT    temp; //Windows API requires temp RECT to hold actual intersection
+    RECT    temp = {0}; //Windows API requires temp RECT to hold actual intersection
 
     if ((NULL == pRect1) || (NULL == pRect2))
     {
@@ -589,7 +581,6 @@ Mine_GameWon(VOID)
 {
     BOOLEAN    bFalse = FALSE;
     INT_PTR    dialogReturn = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -613,8 +604,7 @@ Mine_GameWon(VOID)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCEW(IDD_NEWBEST), hwnd, MineNewBest_Dialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show new best time dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show new best time dialog: %lu\n", GetLastError());
                 break;
             }
             else if (MINE_DIALOG_ERROR_OFFSET < dialogReturn)
@@ -628,8 +618,7 @@ Mine_GameWon(VOID)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCEW(IDD_BESTTIMES), hwnd, MineBestTimes_Dialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show best times dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show best times dialog: %lu\n", GetLastError());
                 break;
             }
         }
@@ -653,7 +642,6 @@ Mine_InitInstance(int nCmdShow)
    BOOLEAN    bFalse = FALSE;
    MINE_ERROR status = MINE_ERROR_SUCCESS;
    RECT       windowSize = {0};
-   MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
    do
    {
@@ -665,8 +653,7 @@ Mine_InitInstance(int nCmdShow)
        //Convert from client area size to window area size
        if (0 == AdjustWindowRect(&windowSize, WS_OVERLAPPED|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX, TRUE))
        {
-           MINEDEBUG_GET_ERROR_VALUE;
-           MineDebug_PrintError("Calculating window size from client size: %lu\n", errorValue);
+           MineDebug_PrintError("Calculating window size from client size: %lu\n", GetLastError());
            status = MINE_ERROR_CREATE_WINDOW;
            break;
        }
@@ -675,11 +662,9 @@ Mine_InitInstance(int nCmdShow)
         hwnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPED|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX,
                              CW_USEDEFAULT, 0, windowSize.right-windowSize.left,
                              windowSize.bottom-windowSize.top, NULL, NULL, hInst, NULL);
-
         if (NULL == hwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Creating window: %lu\n", errorValue);
+            MineDebug_PrintError("Creating window: %lu\n", GetLastError());
             status = MINE_ERROR_CREATE_WINDOW;
             break;
         }
@@ -692,8 +677,7 @@ Mine_InitInstance(int nCmdShow)
             status = MINE_ERROR_PAINT;
             if (0 == DestroyWindow(hwnd))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to destroy window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to destroy window: %lu\n", GetLastError());
             }
             break;
         }
@@ -805,7 +789,6 @@ Mine_PaintScreen(_In_ HWND hwnd)
     PAINTSTRUCT ps = {0};
     MINE_ERROR  status = MINE_ERROR_SUCCESS;
     HPEN        whitePen = NULL;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -949,8 +932,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
             if (0 == BitBlt(hDC, windowData.timerRegion.left, windowData.timerRegion.top,
                             MINE_TIMER_WIDTH, MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -966,8 +948,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
             if (0 == BitBlt(hDC, windowData.timerRegion.left+MINE_TIMER_WIDTH, windowData.timerRegion.top,
                             MINE_TIMER_WIDTH, MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -983,8 +964,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
             if (0 == BitBlt(hDC, windowData.timerRegion.left+(2*MINE_TIMER_WIDTH), windowData.timerRegion.top,
                             MINE_TIMER_WIDTH, MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1011,8 +991,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                 windowData.mineCountRegion.top, MINE_TIMER_WIDTH, 
                                 MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Copying timer bitmap dash to screen: %lu\n", errorValue);
+                    MineDebug_PrintError("Copying timer bitmap dash to screen: %lu\n", GetLastError());
                     status = MINE_ERROR_PAINT;
                     break;
                 }
@@ -1033,8 +1012,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                 windowData.mineCountRegion.top, MINE_TIMER_WIDTH, 
                                 MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                    MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError());
                     status = MINE_ERROR_PAINT;
                     break;
                 }
@@ -1053,8 +1031,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                             windowData.mineCountRegion.top, MINE_TIMER_WIDTH, 
                             MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1072,8 +1049,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                             windowData.mineCountRegion.top, MINE_TIMER_WIDTH, 
                             MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError());
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1091,8 +1067,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                             windowData.mineCountRegion.top, MINE_TIMER_WIDTH, 
                             MINE_TIMER_HEIGHT, memoryDC, 0, 0, SRCCOPY))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, errorValue);
+                MineDebug_PrintError("Copying timer bitmap %i to screen: %lu\n", index, GetLastError);
                 status = MINE_ERROR_PAINT;
                 break;
             }
@@ -1116,8 +1091,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                     windowData.faceRegion.top, MINE_FACE_WIDTH, 
                                     MINE_FACE_HEIGHT, memoryDC, 0, 0, SRCCOPY))
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Copying face won to screen: %lu\n", errorValue);
+                        MineDebug_PrintError("Copying face won to screen: %lu\n", GetLastError());
                         status = MINE_ERROR_PAINT;
                         break;
                     }
@@ -1135,8 +1109,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                     windowData.faceRegion.top, MINE_FACE_WIDTH, 
                                     MINE_FACE_HEIGHT, memoryDC, 0, 0, SRCCOPY))
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Copying face lost to screen: %lu\n", errorValue);
+                        MineDebug_PrintError("Copying face lost to screen: %lu\n", GetLastError());
                         status = MINE_ERROR_PAINT;
                         break;
                     }
@@ -1156,8 +1129,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                     windowData.faceRegion.top, MINE_FACE_WIDTH, 
                                     MINE_FACE_HEIGHT, memoryDC, 0, 0, SRCCOPY))
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Copying face clicked to screen: %lu\n", errorValue);
+                        MineDebug_PrintError("Copying face clicked to screen: %lu\n", GetLastError());
                         status = MINE_ERROR_PAINT;
                         break;
                     }
@@ -1174,8 +1146,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                     windowData.faceRegion.top, MINE_FACE_WIDTH, 
                                     MINE_FACE_HEIGHT, memoryDC, 0, 0, SRCCOPY))
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Copying face normal to screen: %lu\n", errorValue);
+                        MineDebug_PrintError("Copying face normal to screen: %lu\n", GetLastError());
                         status = MINE_ERROR_PAINT;
                         break;
                     }
@@ -1216,8 +1187,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                 windowData.boardRegion.top+jx*MINE_TILE_PIXELS, MINE_TILE_PIXELS,
                                                 MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                 {
-                                    MINEDEBUG_GET_ERROR_VALUE;
-                                    MineDebug_PrintError("Copying flag to screen: %lu\n", errorValue);
+                                    MineDebug_PrintError("Copying flag to screen: %lu\n", GetLastError());
                                     status = MINE_ERROR_PAINT;
                                     break;
                                 }
@@ -1236,9 +1206,8 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                 windowData.boardRegion.top+jx*MINE_TILE_PIXELS, MINE_TILE_PIXELS,
                                                 MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                 {
-                                    MINEDEBUG_GET_ERROR_VALUE;
                                     MineDebug_PrintError("Copying numbers %i to screen: %lu\n", 
-                                                         index, errorValue);
+                                                         index, GetLastError());
                                     status = MINE_ERROR_PAINT;
                                     break;
                                 }
@@ -1264,8 +1233,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                     windowData.boardRegion.top+jx*MINE_TILE_PIXELS, 
                                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                     {
-                                        MINEDEBUG_GET_ERROR_VALUE;
-                                        MineDebug_PrintError("Copying mine hit to screen: %lu\n", errorValue);
+                                        MineDebug_PrintError("Copying mine hit to screen: %lu\n", GetLastError());
                                         status = MINE_ERROR_PAINT;
                                         break;
                                     }
@@ -1284,9 +1252,8 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                     windowData.boardRegion.top+jx*MINE_TILE_PIXELS,
                                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                     {
-                                        MINEDEBUG_GET_ERROR_VALUE;
                                         MineDebug_PrintError("Copying numbers %i to screen: %lu\n", 
-                                                             index, errorValue);
+                                                             index, GetLastError());
                                         status = MINE_ERROR_PAINT;
                                         break;
                                     }
@@ -1307,8 +1274,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                     windowData.boardRegion.top+jx*MINE_TILE_PIXELS, 
                                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                     {
-                                        MINEDEBUG_GET_ERROR_VALUE;
-                                        MineDebug_PrintError("Copying flag to screen: %lu\n", errorValue);
+                                        MineDebug_PrintError("Copying flag to screen: %lu\n", GetLastError());
                                         status = MINE_ERROR_PAINT;
                                         break;
                                     }
@@ -1327,8 +1293,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                     windowData.boardRegion.top+jx*MINE_TILE_PIXELS, 
                                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                     {
-                                        MINEDEBUG_GET_ERROR_VALUE;
-                                        MineDebug_PrintError("Copying false flag to screen: %lu\n", errorValue);
+                                        MineDebug_PrintError("Copying false flag to screen: %lu\n", GetLastError());
                                         status = MINE_ERROR_PAINT;
                                         break;
                                     }
@@ -1350,8 +1315,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                     windowData.boardRegion.top+jx*MINE_TILE_PIXELS, 
                                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                     {
-                                        MINEDEBUG_GET_ERROR_VALUE;
-                                        MineDebug_PrintError("Copying mine to screen: %lu\n", errorValue);
+                                        MineDebug_PrintError("Copying mine to screen: %lu\n", GetLastError());
                                         status = MINE_ERROR_PAINT;
                                         break;
                                     }
@@ -1369,8 +1333,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                                     windowData.boardRegion.top+jx*MINE_TILE_PIXELS, 
                                                     MINE_TILE_PIXELS, MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                                     {
-                                        MINEDEBUG_GET_ERROR_VALUE;
-                                        MineDebug_PrintError("Copying unclicked to screen: %lu\n", errorValue);
+                                        MineDebug_PrintError("Copying unclicked to screen: %lu\n", GetLastError());
                                         status = MINE_ERROR_PAINT;
                                         break;
                                     }
@@ -1395,8 +1358,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                             windowData.boardRegion.top+jx*MINE_TILE_PIXELS, MINE_TILE_PIXELS, 
                                             MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                             {
-                                MINEDEBUG_GET_ERROR_VALUE;
-                                MineDebug_PrintError("Copying numbers %i to screen: %lu\n", index, errorValue);
+                                MineDebug_PrintError("Copying numbers %i to screen: %lu\n", index, GetLastError());
                                 status = MINE_ERROR_PAINT;
                                 break;
                             }
@@ -1414,8 +1376,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                             windowData.boardRegion.top+jx*MINE_TILE_PIXELS, MINE_TILE_PIXELS,
                                             MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                             {
-                                MINEDEBUG_GET_ERROR_VALUE;
-                                MineDebug_PrintError("Copying flag to screen: %lu\n", errorValue);
+                                MineDebug_PrintError("Copying flag to screen: %lu\n", GetLastError());
                                 status = MINE_ERROR_PAINT;
                                 break;
                             }
@@ -1433,8 +1394,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                             windowData.boardRegion.top+jx*MINE_TILE_PIXELS, MINE_TILE_PIXELS, 
                                             MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                             {
-                                MINEDEBUG_GET_ERROR_VALUE;
-                                MineDebug_PrintError("Copying held to screen: %lu\n", errorValue);
+                                MineDebug_PrintError("Copying held to screen: %lu\n", GetLastError());
                                 status = MINE_ERROR_PAINT;
                                 break;
                             }
@@ -1452,8 +1412,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
                                             windowData.boardRegion.top+jx*MINE_TILE_PIXELS, MINE_TILE_PIXELS, 
                                             MINE_TILE_PIXELS, memoryDC, 0, 0, SRCCOPY))
                             {
-                                MINEDEBUG_GET_ERROR_VALUE;
-                                MineDebug_PrintError("Copying unclicked to screen: %lu\n", errorValue);
+                                MineDebug_PrintError("Copying unclicked to screen: %lu\n", GetLastError());
                                 status = MINE_ERROR_PAINT;
                                 break;
                             }
@@ -1480,11 +1439,13 @@ Mine_PaintScreen(_In_ HWND hwnd)
         {
             MineDebug_PrintWarning("Unable to delete memory device context\n");
         }
+        memoryDC = NULL;
     }
 
     if (NULL != hDC)
     {
         (void) EndPaint(hwnd, &ps);
+        hDC = NULL;
     }
 
     if (NULL != whitePen)
@@ -1493,6 +1454,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
         {
             MineDebug_PrintWarning("Unable to delete white pen\n");
         }
+        whitePen = NULL;
     }
 
     if (NULL != greyPen)
@@ -1501,6 +1463,7 @@ Mine_PaintScreen(_In_ HWND hwnd)
         {
             MineDebug_PrintWarning("Unable to delete grey pen\n");
         }
+        greyPen = NULL;
     }
 
     return status;
@@ -1869,7 +1832,6 @@ Mine_RegisterClass(VOID)
     BOOLEAN     bFalse = FALSE;
     MINE_ERROR  status = MINE_ERROR_SUCCESS;
     WNDCLASSEXW wcex = {0};
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -1883,16 +1845,14 @@ Mine_RegisterClass(VOID)
         wcex.hIcon = LoadIconW(hInst, MAKEINTRESOURCEW(IDI_MINESWEEPER));
         if (NULL == wcex.hIcon)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading large sized icon: %lu\n", errorValue);
+            MineDebug_PrintError("Loading large sized icon: %lu\n", GetLastError());
             status = MINE_ERROR_OBJECT;
             break;
         }
         wcex.hCursor = LoadCursorW(NULL, IDC_ARROWW);
         if (NULL == wcex.hCursor)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading arrow cursor: %lu\n", errorValue);
+            MineDebug_PrintError("Loading arrow cursor: %lu\n", GetLastError());
             status = MINE_ERROR_OBJECT;
             break;
         }
@@ -1909,8 +1869,7 @@ Mine_RegisterClass(VOID)
         wcex.hIconSm = LoadIconW(wcex.hInstance, MAKEINTRESOURCEW(IDI_SMALL));
         if (NULL == wcex.hIconSm)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading small sized icon: %i\n", errorValue);
+            MineDebug_PrintError("Loading small sized icon: %i\n", GetLastError());
             status = MINE_ERROR_OBJECT;
             break;
         }
@@ -1919,8 +1878,7 @@ Mine_RegisterClass(VOID)
         atom = RegisterClassExW(&wcex);
         if (0 == atom)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Registering window class: %lu", errorValue);
+            MineDebug_PrintError("Registering window class: %lu", GetLastError());
             status = MINE_ERROR_REGISTER_CLASS;
             break;
         }
@@ -1938,6 +1896,7 @@ Mine_RegisterClass(VOID)
             {
                 MineDebug_PrintWarning("Unable to delete hbrBackground brush\n");
             }
+            wcex.hbrBackground = NULL;
         }
     }
 
@@ -2002,6 +1961,7 @@ Mine_SetRegDword(_In_ LPWSTR pValueName, DWORD newValue)
         {
             MineDebug_PrintWarning("Unable to close registry key: %li\n", lstatus);
         }
+        registryKey = NULL;
     }
 
     return status;
@@ -2085,6 +2045,7 @@ Mine_SetRegString(_In_ LPWSTR pValueName, _In_ LPWSTR pNewValue)
         {
             MineDebug_PrintWarning("Unable to close registry key: %li\n", lstatus);
         }
+        registryKey = NULL;
     }
 
     return status;
@@ -2757,6 +2718,7 @@ Mine_SetupGlobal(VOID)
         {
             MineDebug_PrintWarning("Unable to close registry key: %li\n", lstatus);
         }
+        registryKey = NULL;
     }
 
     return status;
@@ -2775,7 +2737,6 @@ Mine_SetupImageData(VOID)
     BOOLEAN    bFalse = FALSE;
     INT        ix = 0;
     MINE_ERROR status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -2787,8 +2748,7 @@ Mine_SetupImageData(VOID)
                                                        LR_DEFAULTCOLOR);     
             if (NULL == imageData.timer[ix])
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintError("Loading timer %i bitmap: %lu\n", ix, errorValue);
+                MineDebug_PrintError("Loading timer %i bitmap: %lu\n", ix, GetLastError());
                 status = MINE_ERROR_BITMAP;
                 break;
             }
@@ -2804,8 +2764,7 @@ Mine_SetupImageData(VOID)
                                                    LR_DEFAULTCOLOR);
         if (NULL == imageData.timerDash)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading timer dash bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading timer dash bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2816,8 +2775,7 @@ Mine_SetupImageData(VOID)
                                                     LR_DEFAULTCOLOR);
         if (NULL == imageData.faceNormal)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading face normal bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading face normal bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2828,8 +2786,7 @@ Mine_SetupImageData(VOID)
                                                      LR_DEFAULTCOLOR);
         if (NULL == imageData.faceClicked)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading face clicked bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading face clicked bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2840,8 +2797,7 @@ Mine_SetupImageData(VOID)
                                                  LR_DEFAULTCOLOR);
         if (NULL == imageData.faceWon)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading face won bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading face won bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2852,8 +2808,7 @@ Mine_SetupImageData(VOID)
                                                   LR_DEFAULTCOLOR);
         if (NULL == imageData.faceLost)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading face lost bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading face lost bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2864,8 +2819,7 @@ Mine_SetupImageData(VOID)
                                                    LR_DEFAULTCOLOR);
         if (NULL == imageData.unclicked)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading unclicked bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading unclicked bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2876,8 +2830,7 @@ Mine_SetupImageData(VOID)
                                               LR_DEFAULTCOLOR);
         if (NULL == imageData.held)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading held bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading held bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2888,8 +2841,7 @@ Mine_SetupImageData(VOID)
                                               LR_DEFAULTCOLOR);
         if (NULL == imageData.flag)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading flag bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading flag bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2900,8 +2852,7 @@ Mine_SetupImageData(VOID)
                                                    LR_DEFAULTCOLOR);
         if (NULL == imageData.falseFlag)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading false flag bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading false flag bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2912,8 +2863,7 @@ Mine_SetupImageData(VOID)
                                               LR_DEFAULTCOLOR);
         if (NULL == imageData.mine)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading mine bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading mine bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2924,8 +2874,7 @@ Mine_SetupImageData(VOID)
                                                  LR_DEFAULTCOLOR);
         if (NULL == imageData.mineHit)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintError("Loading mine hit bitmap: %i\n", errorValue);
+            MineDebug_PrintError("Loading mine hit bitmap: %i\n", GetLastError());
             status = MINE_ERROR_BITMAP;
             break;
         }
@@ -2957,7 +2906,6 @@ Mine_SetupNumberImageData(VOID)
     UINT       ix = 0;
     UINT       randArray[MINE_NUM_RANDOM_TILES];
     MINE_ERROR status = MINE_ERROR_SUCCESS;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     do
     {
@@ -3002,8 +2950,7 @@ Mine_SetupNumberImageData(VOID)
                                                              LR_DEFAULTCOLOR);     
                 if (NULL == imageData.numbers[ix])
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Loading clicked %i bitmap: %i\n", ix, errorValue);
+                    MineDebug_PrintError("Loading clicked %i bitmap: %i\n", ix, GetLastError());
                     status = MINE_ERROR_BITMAP;
                     break;
                 }
@@ -3016,8 +2963,7 @@ Mine_SetupNumberImageData(VOID)
                                                              LR_DEFAULTCOLOR);     
                 if (NULL == imageData.numbers[ix])
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Loading clicked %i bitmap: %i\n", 8 - ix, errorValue);
+                    MineDebug_PrintError("Loading clicked %i bitmap: %i\n", 8 - ix, GetLastError());
                     status = MINE_ERROR_BITMAP;
                     break;
                 }
@@ -3030,8 +2976,7 @@ Mine_SetupNumberImageData(VOID)
                                                              LR_DEFAULTCOLOR);     
                 if (NULL == imageData.numbers[ix])
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Loading solid %i bitmap: %i\n", ix, errorValue);
+                    MineDebug_PrintError("Loading solid %i bitmap: %i\n", ix, GetLastError());
                     status = MINE_ERROR_BITMAP;
                     break;
                 }
@@ -3047,8 +2992,7 @@ Mine_SetupNumberImageData(VOID)
                                                                  LR_DEFAULTCOLOR);     
                     if (NULL == imageData.numbers[ix])
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Loading clicked 0 bitmap: %i\n", errorValue);
+                        MineDebug_PrintError("Loading clicked 0 bitmap: %i\n", GetLastError());
                         status = MINE_ERROR_BITMAP;
                         break;
                     }
@@ -3061,8 +3005,7 @@ Mine_SetupNumberImageData(VOID)
                                                                  LR_DEFAULTCOLOR);     
                     if (NULL == imageData.numbers[ix])
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintError("Loading random %i bitmap: %i\n", randArray[ix - 1], errorValue);
+                        MineDebug_PrintError("Loading random %i bitmap: %i\n", randArray[ix - 1], GetLastError());
                         status = MINE_ERROR_BITMAP;
                         break;
                     }
@@ -3076,8 +3019,7 @@ Mine_SetupNumberImageData(VOID)
                                                              LR_DEFAULTCOLOR);     
                 if (NULL == imageData.numbers[ix])
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintError("Loading clicked 0 bitmap: %i\n", errorValue);
+                    MineDebug_PrintError("Loading clicked 0 bitmap: %i\n", GetLastError());
                     status = MINE_ERROR_BITMAP;
                     break;
                 }
@@ -3110,8 +3052,8 @@ Mine_SetupNumberImageData(VOID)
 VOID
 Mine_SetupWindow(VOID)
 {
-    windowData.clientHeight = MINE_BASE_HEIGHT_PIXELS+MINE_TILE_PIXELS*gameData.height;
-    windowData.clientWidth = MINE_BASE_WIDTH_PIXELS+MINE_TILE_PIXELS*gameData.width;
+    windowData.clientHeight = MINE_BASE_HEIGHT_PIXELS + MINE_TILE_PIXELS*gameData.height;
+    windowData.clientWidth = MINE_BASE_WIDTH_PIXELS + MINE_TILE_PIXELS*gameData.width;
 
     /** Store coordinates for all decorative white lines. */
     //White lines along left side of window
@@ -3361,7 +3303,6 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     UINT              wmId = 0;
     short             xMouse = 0;
     short             yMouse = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     functionEntryCount += 1;
 
@@ -3424,9 +3365,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Mine_SetupWindow();
             if (0 == GetWindowRect(hWnd, &windowSize))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
                 status = MINE_ERROR_GET_DATA;
-                MineDebug_PrintError("Getting window rectangle: %lu\n", errorValue);
+                MineDebug_PrintError("Getting window rectangle: %lu\n", GetLastError());
                 errorOccurred = TRUE;
                 break;
             }
@@ -3439,9 +3379,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                                 windowSize.right - windowSize.left,
                                 windowSize.bottom - windowSize.top, TRUE))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
                 status = MINE_ERROR_RESIZE;
-                MineDebug_PrintError("Moving the window: %lu\n", errorValue);
+                MineDebug_PrintError("Moving the window: %lu\n", GetLastError());
                 errorOccurred = TRUE;
                 break;
             }
@@ -3458,8 +3397,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCE(IDD_CUSTOM), hWnd, MineCustom_Dialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show custom dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show custom dialog: %lu\n", GetLastError());
                 break;
             }
             else if (MINE_DIALOG_ERROR_OFFSET < dialogReturn)
@@ -3495,9 +3433,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 Mine_SetupWindow();
                 if (0 == GetWindowRect(hWnd, &windowSize))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
                     status = MINE_ERROR_GET_DATA;
-                    MineDebug_PrintError("Getting window rectangle: %lu\n", errorValue);
+                    MineDebug_PrintError("Getting window rectangle: %lu\n", GetLastError());
                     errorOccurred = TRUE;
                     break;
                 }
@@ -3510,9 +3447,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                                     windowSize.right - windowSize.left,
                                     windowSize.bottom - windowSize.top, TRUE))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
                     status = MINE_ERROR_RESIZE;
-                    MineDebug_PrintError("Moving the window: %lu\n", errorValue);
+                    MineDebug_PrintError("Moving the window: %lu\n", GetLastError());
                     errorOccurred = TRUE;
                     break;
                 }
@@ -3530,8 +3466,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCEW(IDD_BESTTIMES), hWnd, MineBestTimes_Dialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show best times dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show best times dialog: %lu\n", GetLastError());
                 break;
             }
             else if (MINE_DIALOG_ERROR_OFFSET < dialogReturn)
@@ -3546,8 +3481,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case IDM_EXIT:
             if (0 == DestroyWindow(hWnd))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to destroy window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to destroy window: %lu\n", GetLastError());
             }
             break;
 
@@ -3663,8 +3597,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCE(IDD_MOVEMENT), hWnd, MineMovement_Dialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show movement dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show movement dialog: %lu\n", GetLastError());
                 break;
             }
             else if (MINE_DIALOG_ERROR_OFFSET < dialogReturn)
@@ -3697,8 +3630,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             dialogReturn = DialogBoxW(hInst, MAKEINTRESOURCEW(IDD_ABOUTBOX), hWnd, MineAbout_Dialog);
             if ((0 == dialogReturn) || (-1 == dialogReturn))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("From system trying to show about dialog: %lu\n", errorValue);
+                MineDebug_PrintWarning("From system trying to show about dialog: %lu\n", GetLastError());
                 break;
             }
             else if (MINE_DIALOG_ERROR_OFFSET < dialogReturn)
@@ -3805,8 +3737,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //Timers have to be deleted while window still exists
         if (0 == KillTimer(hWnd, MINE_TIMER_CLOCK))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Unable to kill timer: %lu\n", errorValue);
+            MineDebug_PrintWarning("Unable to kill timer: %lu\n", GetLastError());
         }
 
         //Movement timer exists if movementTimerCreated flag is set
@@ -3814,8 +3745,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             if (0 == KillTimer(hwnd, MINE_TIMER_MOVE))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to kill movement timer: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to kill movement timer: %lu\n", GetLastError());
             }
         }
 
@@ -3853,9 +3783,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 if (ERROR == ScrollWindowEx(hWnd, 0, (-1)*MINE_TILE_PIXELS, &windowData.boardRegion,
                                             &windowData.boardRegion, NULL, NULL, SW_INVALIDATE))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
                     status = MINE_ERROR_PAINT;
-                    MineDebug_PrintError("Scrolling window up: %lu\n", errorValue);
+                    MineDebug_PrintError("Scrolling window up: %lu\n", GetLastError());
                     errorOccurred = TRUE;
                     break;
                 }
@@ -3872,9 +3801,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 if (ERROR == ScrollWindowEx(hWnd, 0, MINE_TILE_PIXELS, &windowData.boardRegion,
                                             &windowData.boardRegion, NULL, NULL, SW_INVALIDATE))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
                     status = MINE_ERROR_PAINT;
-                    MineDebug_PrintError("Scrolling window down: %lu\n", errorValue);
+                    MineDebug_PrintError("Scrolling window down: %lu\n", GetLastError());
                     errorOccurred = TRUE;
                     break;
                 }
@@ -3891,9 +3819,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 if (ERROR == ScrollWindowEx(hWnd, (-1)*MINE_TILE_PIXELS, 0, &windowData.boardRegion,
                                             &windowData.boardRegion, NULL, NULL, SW_INVALIDATE))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
                     status = MINE_ERROR_PAINT;
-                    MineDebug_PrintError("Scrolling window left: %lu\n", errorValue);
+                    MineDebug_PrintError("Scrolling window left: %lu\n", GetLastError());
                     errorOccurred = TRUE;
                     break;
                 }
@@ -3910,9 +3837,8 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 if (ERROR == ScrollWindowEx(hWnd, MINE_TILE_PIXELS, 0, &windowData.boardRegion,
                                             &windowData.boardRegion, NULL, NULL, SW_INVALIDATE))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
                     status = MINE_ERROR_PAINT;
-                    MineDebug_PrintError("Scrolling window right: %lu\n", errorValue);
+                    MineDebug_PrintError("Scrolling window right: %lu\n", GetLastError());
                     errorOccurred = TRUE;
                     break;
                 }
@@ -4012,8 +3938,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         if (0 == ReleaseCapture())
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Unable to release mouse capture: %lu\n", errorValue);
+            MineDebug_PrintWarning("Unable to release mouse capture: %lu\n", GetLastError());
         }
         //Releasing either mouse button counts as releasing both mouse buttons
         gameData.leftDown = FALSE;
@@ -4126,8 +4051,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         if (0 == ReleaseCapture())
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Unable to release mouse capture: %lu\n", errorValue);
+            MineDebug_PrintWarning("Unable to release mouse capture: %lu\n", GetLastError());
         }
         gameData.rightDown = FALSE;
         break;
@@ -4171,8 +4095,7 @@ WndProc(_In_ HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (0 == DestroyWindow(hWnd))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Unable to destroy window: %lu\n", errorValue);
+            MineDebug_PrintWarning("Unable to destroy window: %lu\n", GetLastError());
         }
     }
 

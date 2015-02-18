@@ -49,7 +49,6 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     INT_PTR     returnValue = (INT_PTR) FALSE;
     MINE_ERROR  status = MINE_ERROR_SUCCESS;
     UINT        value = 0;
-    MINEDEBUG_INITIALIZE_ERROR_VALUE;
 
     UNREFERENCED_PARAMETER(lParam);
 
@@ -64,13 +63,11 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         checkHwnd = GetDlgItem(hDlg, IDC_MOVEMENT_CHECK);
         if (NULL == checkHwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting check control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting check control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -78,13 +75,11 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         aggressiveHwnd = GetDlgItem(hDlg, IDC_MOVEMENT_AGGRESSIVE);
         if (NULL == aggressiveHwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting aggressiveness edit control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting aggressiveness edit control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -92,13 +87,11 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         freqHwnd = GetDlgItem(hDlg, IDC_MOVEMENT_FREQ);
         if (NULL == checkHwnd)
         {
-            MINEDEBUG_GET_ERROR_VALUE;
             status = MINE_ERROR_CONTROL;
-            MineDebug_PrintError("Getting frequency edit control handle: %lu\n", errorValue);
+            MineDebug_PrintError("Getting frequency edit control handle: %lu\n", GetLastError());
             if (0 == EndDialog(hDlg, MINE_DIALOG_ERROR_OFFSET + (INT_PTR) status))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
             break;
         }
@@ -106,14 +99,12 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         /** Upon initialization, set edit controls to show previous value. */
         if (0 == SetDlgItemInt(hDlg, IDC_MOVEMENT_FREQ, (UINT) menuData.movementFreq, FALSE))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting movement frequency int: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting movement frequency int: %lu\n", GetLastError);
         }
 
         if (0 == SetDlgItemInt(hDlg, IDC_MOVEMENT_AGGRESSIVE, (UINT) menuData.movementAggressive, FALSE))
         {
-            MINEDEBUG_GET_ERROR_VALUE;
-            MineDebug_PrintWarning("Setting movement aggressiveness int: %lu\n", errorValue);
+            MineDebug_PrintWarning("Setting movement aggressiveness int: %lu\n", GetLastError);
         }
 
         if (menuData.useMovement)
@@ -144,8 +135,7 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 value = GetDlgItemInt(hDlg, IDC_MOVEMENT_FREQ, &bReturn, FALSE);
                 if (FALSE == bReturn)
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintWarning("Getting movement frequency int: %lu\n", errorValue);
+                    MineDebug_PrintWarning("Getting movement frequency int: %lu\n", GetLastError());
                     //Upon error getting value from edit control, use default value as backup
                     value = MINE_SECOND;
                 }
@@ -173,8 +163,7 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 value = GetDlgItemInt(hDlg, IDC_MOVEMENT_AGGRESSIVE, &bReturn, FALSE);
                 if (FALSE == bReturn)
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintWarning("Getting movement aggressiveness int: %lu\n", errorValue);
+                    MineDebug_PrintWarning("Getting movement aggressiveness int: %lu\n", GetLastError());
                     //Upon error getting value from edit control, use default value as backup
                     value = MINE_MOVEMENT_DEFAULT_AGGRESSIVENESS;
                 }
@@ -209,8 +198,7 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 //Set a timer to perform the actual movement
                 if (0 == SetTimer(hwnd, MINE_TIMER_MOVE, (UINT) menuData.movementFreq, NULL))
                 {
-                    MINEDEBUG_GET_ERROR_VALUE;
-                    MineDebug_PrintWarning("Creating movement timer: %lu\n", errorValue);
+                    MineDebug_PrintWarning("Creating movement timer: %lu\n", GetLastError());
                 }
                 else
                 {
@@ -232,8 +220,7 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 {
                     if (0 == KillTimer(hwnd, MINE_TIMER_MOVE))
                     {
-                        MINEDEBUG_GET_ERROR_VALUE;
-                        MineDebug_PrintWarning("Unable to kill movement timer: %lu\n", errorValue);
+                        MineDebug_PrintWarning("Unable to kill movement timer: %lu\n", GetLastError());
                     }
                     movementTimerCreated = FALSE;
                 }
@@ -241,8 +228,7 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         /** Pressing cancel button makes no changes. */
@@ -251,8 +237,7 @@ MineMovement_Dialog(_In_ HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             returnValue = (INT_PTR) TRUE;
             if (0 == EndDialog(hDlg, LOWORD(wParam)))
             {
-                MINEDEBUG_GET_ERROR_VALUE;
-                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", errorValue);
+                MineDebug_PrintWarning("Unable to end dialog window: %lu\n", GetLastError());
             }
         }
         /** Clicking the check mark either enables or disables movement. */
@@ -310,7 +295,7 @@ MineMovement_ProcessMovement(VOID)
     UINT *     pXOrder = NULL;
     UINT *     pYOrder = NULL;
     MINE_ERROR status = MINE_ERROR_SUCCESS;
-    RECT       windowUpdate;
+    RECT       windowUpdate = {0};
 
     do
     {
