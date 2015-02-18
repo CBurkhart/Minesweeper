@@ -95,6 +95,8 @@ MineMouse_FirstClick(LONG xGrid, LONG yGrid)
 
         gameData.gameStarted = TRUE;
         gameData.gameStartTime = GetTickCount64(); //Record game start time
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;
@@ -347,6 +349,8 @@ MineMouse_MoveDoubleClick(short xMouse, short yMouse)
             gameData.prevGridX = xGrid;
             gameData.prevGridY = yGrid;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -481,6 +485,8 @@ MineMouse_MoveLeftClick(short xMouse, short yMouse)
             gameData.prevGridX = xGrid;
             gameData.prevGridY = yGrid;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -799,6 +805,8 @@ MineMouse_ProcessDoubleClick(short xMouse, short yMouse)
                 }
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -911,6 +919,8 @@ MineMouse_ProcessLeftClick(short xMouse, short yMouse)
                 break;
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -1032,6 +1042,8 @@ MineMouse_ProcessRightDown(short xMouse, short yMouse)
                 MineDebug_PrintWarning("Unable to invalidate rectangle\n");
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -1195,6 +1207,8 @@ MineMouse_StartDoubleClick(short xMouse, short yMouse)
         //Store location of mouse so highlighted tiles can be unhighlighted later
         gameData.prevGridX = xGrid;
         gameData.prevGridY = yGrid;
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -1288,6 +1302,8 @@ MineMouse_StartLeftClick(short xMouse, short yMouse)
             gameData.prevGridX = xGrid;
             gameData.prevGridY = yGrid;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -1489,6 +1505,8 @@ MineMouse_UncoverTile(LONG xGrid, LONG yGrid, _In_ HDC hDC, _In_ HDC hMemDC)
 
             Mine_GameWon();
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;

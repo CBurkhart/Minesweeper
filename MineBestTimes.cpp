@@ -172,6 +172,7 @@ MineBestTimes_ResetScores(VOID)
             MineDebug_PrintWarning("In function Mine_SetRegString\n");
         }
 
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;
@@ -255,6 +256,8 @@ MineBestTimes_UpdateLabels(_In_ HWND hDlg)
         {
             MineDebug_PrintWarning("Setting expert name string: %lu\n", GetLastError());
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;

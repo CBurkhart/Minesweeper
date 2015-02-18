@@ -100,6 +100,8 @@ MineDebug_FormatPrintToDebugConsole(_In_z_ LPSTR level, _In_z_ LPSTR file, INT l
 
         /** Place buffer into debug console. */
         OutputDebugStringA(printBuffer);
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return;

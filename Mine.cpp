@@ -202,6 +202,8 @@ wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
         //Quit message is set to status that was kept in window procedure 
         status = (MINE_ERROR) msg.wParam;
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -336,6 +338,8 @@ Mine_AssignNumbers(LONG xGridMin, LONG xGridMax, LONG yGridMin, LONG yGridMax)
                 gameData.gameBoard[MINE_INDEX(xGridBase, yGridBase)] = mines;
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;
@@ -622,6 +626,8 @@ Mine_GameWon(VOID)
                 break;
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return;
@@ -681,6 +687,8 @@ Mine_InitInstance(int nCmdShow)
             }
             break;
         }
+
+        __assume(FALSE == bFalse);
    } while (bFalse);
 
    return status;
@@ -760,6 +768,8 @@ Mine_NewRandomBoard(VOID)
 
         //All mines should be assigned. Tiles left starts greater than mines left. If mines left ever 
         //equals tiles left then each remaining tile would be assigned a mine with probability one.
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;
@@ -1429,6 +1439,8 @@ Mine_PaintScreen(_In_ HWND hwnd)
                 break;
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -1635,6 +1647,8 @@ Mine_Random(UINT limit, _Out_ PUINT output)
                 {
                     onboardRng = TRUE;
                 }
+
+                __assume(FALSE == bFalse);
             } while (bFalse);
 
             //If RDRAND is not supported, set up the windows crypt provider
@@ -1753,6 +1767,8 @@ Mine_Random(UINT limit, _Out_ PUINT output)
 
             *output = (rand % limit);
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;
@@ -1813,6 +1829,8 @@ Mine_RandomPerm(_Inout_updates_to_(numArray, numPerm) PUINT pArray,
             pArray[numArray - 1 - rand] = pArray[ix];
             pArray[ix] = temp;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;
@@ -1882,6 +1900,8 @@ Mine_RegisterClass(VOID)
             status = MINE_ERROR_REGISTER_CLASS;
             break;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -1949,7 +1969,9 @@ Mine_SetRegDword(_In_ LPWSTR pValueName, DWORD newValue)
             MineDebug_PrintError("Setting DWORD registry value: %li\n", lstatus);
             status = MINE_ERROR_REGISTRY;
             break;
-        }       
+        }    
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -2034,6 +2056,8 @@ Mine_SetRegString(_In_ LPWSTR pValueName, _In_ LPWSTR pNewValue)
             status = MINE_ERROR_REGISTRY;
             break;
         }    
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -2176,6 +2200,8 @@ Mine_SetupGame(VOID)
                 break;
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up (upon error only)
@@ -2707,6 +2733,8 @@ Mine_SetupGlobal(VOID)
         {
             menuData.movementAggressive = valueFromRegistry;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
@@ -2887,6 +2915,7 @@ Mine_SetupImageData(VOID)
             break;
         }
 
+        __assume(FALSE == bFalse);
     } while (bFalse);
     
     return status;
@@ -3039,6 +3068,8 @@ Mine_SetupNumberImageData(VOID)
         {
             break;
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     return status;

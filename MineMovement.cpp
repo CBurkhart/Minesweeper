@@ -586,6 +586,8 @@ MineMovement_ProcessMovement(VOID)
                 }
             }
         }
+
+        __assume(FALSE == bFalse);
     } while (bFalse);
 
     //Clean up
